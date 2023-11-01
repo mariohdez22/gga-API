@@ -22,6 +22,21 @@ public class ColaboradoresImpl implements IColaboradoresService{
     }
 
     @Override
+    public List<Colaboradores> getColaboradoresVigentes() {
+        return repoColaboradores.findByEstado("Vigente");
+    }
+
+    @Override
+    public List<Colaboradores> getColaboradoresSuspendidos() {
+        return repoColaboradores.findByEstado("Suspendido");
+    }
+
+    @Override
+    public List<Colaboradores> getColaboradoresNoDisponibles() {
+        return repoColaboradores.findByEstado("No Disponible");
+    }
+
+    @Override
     public Optional<Colaboradores> getColaborador(Integer id){
         return repoColaboradores.findById(id);
     }

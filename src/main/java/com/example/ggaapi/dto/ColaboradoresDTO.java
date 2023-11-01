@@ -49,7 +49,7 @@ public class ColaboradoresDTO {
     Sirve para crear y mapear cada atributo del DTO con el modelo original
 
     retorna null -> si el DTO esta vacio
-    retorna un objeto Colaboradores -> si el DTO tiene informaciones
+    retorna un objeto Colaboradores -> si el DTO tiene informacion
 
     */
     public Colaboradores Mapper(){

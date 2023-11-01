@@ -32,6 +32,16 @@ public class ColaboradoresController {
         return ResponseEntity.ok(listColaboradores);
     }
 
+    @GetMapping("/getColaboradoresVigentes")
+    public ResponseEntity<?> getColaboradoresVigentes(){
+        List<Colaboradores> listColaboradores = servColaboradores.getColaboradoresVigentes();
+
+        if(listColaboradores.isEmpty()){
+            return new ResponseEntity<>(404 + " No se encontraron resultados", HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(listColaboradores);
+    }
+
     @GetMapping("/getColaborador/{id}")
     public ResponseEntity<?> getColaborador(@PathVariable("id") Integer id){
         Optional<Colaboradores> optColaborador = servColaboradores.getColaborador(id);

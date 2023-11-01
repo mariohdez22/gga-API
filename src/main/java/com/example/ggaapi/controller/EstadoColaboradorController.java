@@ -1,8 +1,11 @@
 package com.example.ggaapi.controller;
 
+import com.example.ggaapi.model.Cargo_colaborador;
 import com.example.ggaapi.model.Estado_colaborador;
 import com.example.ggaapi.service.IEstadoColaboradorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,8 +20,16 @@ public class EstadoColaboradorController {
     private IEstadoColaboradorService servEstado;
 
     @GetMapping("/getAllEstados")
-    public List<Estado_colaborador> getAllEstados(){
-        return servEstado.getAllEstados();
+    public ResponseEntity<?> getAllEstados(){
+
+        List<Estado_colaborador> listEstado = servEstado.getAllEstados();
+
+        if (listEstado.isEmpty())
+        {
+            return new ResponseEntity<>(404 + " No se encontraron resultados", HttpStatus.NOT_FOUND);
+        }
+
+        return ResponseEntity.ok(listEstado);
     }
 
 }

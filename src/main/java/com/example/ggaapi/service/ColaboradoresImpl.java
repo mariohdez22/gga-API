@@ -17,8 +17,7 @@ public class ColaboradoresImpl implements IColaboradoresService{
     private IColaboradoresRepository repoColaboradores;
 
     @Override
-    public List<Colaboradores> getAllColaboradores()
-    {
+    public List<Colaboradores> getAllColaboradores(){
         return repoColaboradores.findAll();
     }
 
@@ -38,38 +37,27 @@ public class ColaboradoresImpl implements IColaboradoresService{
     }
 
     @Override
-    public Optional<Colaboradores> getColaborador(Integer id)
-    {
+    public Optional<Colaboradores> getColaborador(Integer id){
         return repoColaboradores.findById(id);
     }
 
     @Override
-    public Optional<Colaboradores> createColaborador(ColaboradoresDTO colaboradorDTO)
-    {
+    public Optional<Colaboradores> createColaborador(ColaboradoresDTO colaboradorDTO){
         Colaboradores colaborador = colaboradorDTO.Mapper();
-
         Optional<Colaboradores> opt = Optional.ofNullable(colaborador);
-
-        if(opt.isPresent())
-        {
+        if(opt.isPresent()){
             return Optional.of(repoColaboradores.save(colaborador));
         }
-
         return opt;
     }
 
     @Override
-    public Optional<Colaboradores> updateColaborador(ColaboradoresDTO colaboradorDTO)
-    {
+    public Optional<Colaboradores> updateColaborador(ColaboradoresDTO colaboradorDTO){
         Colaboradores colaborador = colaboradorDTO.MapperUpdate();
-
         Optional<Colaboradores> opt = Optional.ofNullable(colaborador);
-
-        if(opt.isPresent())
-        {
+        if(opt.isPresent()){
             return Optional.of(repoColaboradores.save(colaborador));
         }
-
         return opt;
 
     }

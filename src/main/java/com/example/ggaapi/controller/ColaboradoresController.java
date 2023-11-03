@@ -42,26 +42,6 @@ public class ColaboradoresController {
         return ResponseEntity.ok(listColaboradores);
     }
 
-    @GetMapping("/getColaboradoresSuspendidos")
-    public ResponseEntity<?> getColaboradoresSuspendidos(){
-        List<Colaboradores> listColaboradores = servColaboradores.getColaboradoresSuspendidos();
-
-        if(listColaboradores.isEmpty()){
-            return new ResponseEntity<>(404 + " No se encontraron resultados", HttpStatus.NOT_FOUND);
-        }
-        return ResponseEntity.ok(listColaboradores);
-    }
-
-    @GetMapping("/getColaboradoresNoDisponibles")
-    public ResponseEntity<?> getColaboradoresNoDisponibles(){
-        List<Colaboradores> listColaboradores = servColaboradores.getColaboradoresNoDisponibles();
-
-        if(listColaboradores.isEmpty()){
-            return new ResponseEntity<>(404 + " No se encontraron resultados", HttpStatus.NOT_FOUND);
-        }
-        return ResponseEntity.ok(listColaboradores);
-    }
-
     @GetMapping("/getColaborador/{id}")
     public ResponseEntity<?> getColaborador(@PathVariable("id") Integer id){
         Optional<Colaboradores> optColaborador = servColaboradores.getColaborador(id);

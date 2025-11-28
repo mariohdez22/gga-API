@@ -24,7 +24,19 @@ public class ColaboradoresController {
 
     @GetMapping("/getAllColaboradores")
     public ResponseEntity<?> getAllColaboradores(){
-        List<Colaboradores> listColaboradores = servColaboradores.getAllColaboradores();
+        List<ColaboradoresDTO> listColaboradores = ColaboradoresDTO.MapperAllList(servColaboradores.getAllColaboradores());
+
+
+
+        if(listColaboradores.isEmpty()){
+            return new ResponseEntity<>(404 + " No se encontraron resultados", HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(listColaboradores);
+    }
+
+    @GetMapping("/likeColaborador/{data}")
+    public ResponseEntity<?> getColaboradoresLike(@PathVariable String data){
+        List<ColaboradoresDTO> listColaboradores = ColaboradoresDTO.MapperAllList(servColaboradores.getAllColaboradoresLike(data));
 
         if(listColaboradores.isEmpty()){
             return new ResponseEntity<>(404 + " No se encontraron resultados", HttpStatus.NOT_FOUND);
@@ -34,7 +46,27 @@ public class ColaboradoresController {
 
     @GetMapping("/getColaboradoresVigentes")
     public ResponseEntity<?> getColaboradoresVigentes(){
-        List<Colaboradores> listColaboradores = servColaboradores.getColaboradoresVigentes();
+        List<ColaboradoresDTO> listColaboradores = ColaboradoresDTO.MapperAllList(servColaboradores.getColaboradoresVigentes());
+
+        if(listColaboradores.isEmpty()){
+            return new ResponseEntity<>(404 + " No se encontraron resultados", HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(listColaboradores);
+    }
+
+    @GetMapping("/getColaboradoresSuspendidos")
+    public ResponseEntity<?> getColaboradoresSuspendidos(){
+        List<ColaboradoresDTO> listColaboradores = ColaboradoresDTO.MapperAllList(servColaboradores.getColaboradoresSuspendidos());
+
+        if(listColaboradores.isEmpty()){
+            return new ResponseEntity<>(404 + " No se encontraron resultados", HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(listColaboradores);
+    }
+
+    @GetMapping("/getColaboradoresNoDisponibles")
+    public ResponseEntity<?> getColaboradoresNoDisponibles(){
+        List<ColaboradoresDTO> listColaboradores = ColaboradoresDTO.MapperAllList(servColaboradores.getColaboradoresNoDisponibles());
 
         if(listColaboradores.isEmpty()){
             return new ResponseEntity<>(404 + " No se encontraron resultados", HttpStatus.NOT_FOUND);
@@ -44,9 +76,9 @@ public class ColaboradoresController {
 
     @GetMapping("/getColaborador/{id}")
     public ResponseEntity<?> getColaborador(@PathVariable("id") Integer id){
-        Optional<Colaboradores> optColaborador = servColaboradores.getColaborador(id);
-        if(optColaborador.isPresent()){
-            return ResponseEntity.ok(optColaborador.get());
+        ColaboradoresDTO colaborador = servColaboradores.getColaborador(id);
+        if(colaborador != null){
+            return ResponseEntity.ok(colaborador);
         }
         return new ResponseEntity<>(404 + " No se encontro el resultado", HttpStatus.NOT_FOUND);
     }

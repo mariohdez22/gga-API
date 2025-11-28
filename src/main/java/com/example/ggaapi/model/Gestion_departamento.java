@@ -16,8 +16,16 @@ public class Gestion_departamento {
     private String descripcion;
     private Integer cantidadPresupuesto;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name="idColor")
+    private Color_tarjeta color;
+
+    @ManyToOne
     @JoinColumn(name = "idColaborador")
     private Colaboradores colaborador;
+
+    @ManyToOne
+    @JoinColumn(name = "idTipoGestion")
+    private Tipo_Gestion tipoGestion;
 
 }

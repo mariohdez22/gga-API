@@ -2,9 +2,11 @@ package com.example.ggaapi.service;
 
 import com.example.ggaapi.dto.ColaboradoresDTO;
 import com.example.ggaapi.model.Colaboradores;
+import com.example.ggaapi.model.Estado_colaborador;
 import com.example.ggaapi.repository.IColaboradoresRepository;
 import jakarta.persistence.Version;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,27 +20,56 @@ public class ColaboradoresImpl implements IColaboradoresService{
 
     @Override
     public List<Colaboradores> getAllColaboradores(){
-        return repoColaboradores.findAll();
+        return repoColaboradores.findAll(Sort.by(Sort.Direction.DESC,"idColaborador"));
+    }
+
+    @Override
+    public List<Colaboradores> getAllColaboradoresLike(String data){
+        return repoColaboradores.findAllByNombresContainingOrCelularContainingOrEmailContainingOrNicknameContaining(
+                data, data, data, data
+        );
     }
 
     @Override
     public List<Colaboradores> getColaboradoresVigentes() {
-        return repoColaboradores.findByEstado("Vigente");
+        Estado_colaborador estado = new Estado_colaborador();
+        estado.setIdEstado(1);
+        return repoColaboradores.findAllByEstadoOrderByIdColaboradorDesc(estado);
     }
 
     @Override
     public List<Colaboradores> getColaboradoresSuspendidos() {
-        return repoColaboradores.findByEstado("Suspendido");
+        Estado_colaborador estado = new Estado_colaborador();
+        estado.setIdEstado(2);
+        return repoColaboradores.findAllByEstadoOrderByIdColaboradorDesc(estado);
     }
 
     @Override
     public List<Colaboradores> getColaboradoresNoDisponibles() {
-        return repoColaboradores.findByEstado("No Disponible");
+        Estado_colaborador estado = new Estado_colaborador();
+        estado.setIdEstado(3);
+        return repoColaboradores.findAllByEstadoOrderByIdColaboradorDesc(estado);
     }
 
     @Override
-    public Optional<Colaboradores> getColaborador(Integer id){
-        return repoColaboradores.findById(id);
+    public ColaboradoresDTO getColaborador(Integer id){
+        Optional<Colaboradores> opt = repoColaboradores.findById(id);
+        if(opt.isEmpty()){
+            return null;
+        }
+        Colaboradores c = opt.get();
+        ColaboradoresDTO dto = new ColaboradoresDTO();
+
+        dto.setIdColaborador(c.getIdColaborador());
+        dto.setNombres(c.getNombres());
+        dto.setCelular(c.getCelular());
+        dto.setEmail(c.getEmail());
+        dto.setNickname(c.getNickname());
+        dto.setContrasena(c.getContrasena());
+        dto.setIdCargo(c.getCargo().getIdCargo());
+        dto.setIdEstado(c.getEstado().getIdEstado());
+
+        return dto;
     }
 
     @Override
@@ -60,6 +91,11 @@ public class ColaboradoresImpl implements IColaboradoresService{
         }
         return opt;
 
+    }
+
+    @Override
+    public Optional<ColaboradoresDTO> getUser(String username){
+        return Optional.ofNullable(ColaboradoresDTO.Mapper(repoColaboradores.findByNickname(username)));
     }
 
 }

@@ -10,7 +10,9 @@ import java.util.Optional;
 public interface IRegistroProductosService {
 
     List<Registro_productos> getAllProducts();
-    Optional<Registro_productos> getProduct(Integer id);
+    RegistroProductosDTO getProduct(Integer id);
     Optional<Registro_productos> createProduct(RegistroProductosDTO productoDTO);
     Optional<Registro_productos> updateProduct(RegistroProductosDTO productoDTO);
+    List<Registro_productos> getAllByIdFactura(Integer id);
+
 }

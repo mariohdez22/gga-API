@@ -22,7 +22,7 @@ public class GestionDepartamentoController {
 
     @GetMapping("/getAllDepartamentos")
     public ResponseEntity<?> getAllDepartamentos(){
-        List<Gestion_departamento> listDepartamentos = servDepartamentos.getAllDepartamentos();
+        List<GestionDepartamentoDTO> listDepartamentos = GestionDepartamentoDTO.MapperAllList(servDepartamentos.getAllDepartamentos());
         if(listDepartamentos.isEmpty()){
             return new ResponseEntity<>(404 + " No se encontraron resultados", HttpStatus.NOT_FOUND);
         }
@@ -31,11 +31,11 @@ public class GestionDepartamentoController {
 
     @GetMapping("/getDepartamento/{id}")
     public ResponseEntity<?> getDepartamento(@PathVariable("id") Integer id){
-        Optional<Gestion_departamento> departamento = servDepartamentos.getDepartamento(id);
-        if(departamento.isEmpty()){
+        GestionDepartamentoDTO departamento = servDepartamentos.getDepartamento(id);
+        if(departamento == null){
             return new ResponseEntity<>(404 + " No se encontraron resultados", HttpStatus.NOT_FOUND);
         }
-        return ResponseEntity.ok(departamento.get());
+        return ResponseEntity.ok(departamento);
     }
 
     @PostMapping("/createDepartamento")

@@ -1,6 +1,8 @@
 package com.example.ggaapi.controller;
 
 import com.example.ggaapi.dto.RegistroFacturasDTO;
+import com.example.ggaapi.dto.RegistroGastosDTO;
+import com.example.ggaapi.dto.RegistroProductosDTO;
 import com.example.ggaapi.model.Registro_facturas;
 import com.example.ggaapi.service.IRegistroFacturasService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +23,7 @@ public class RegistroFacturasController {
 
     @GetMapping("/getAllFacturas")
     public ResponseEntity<?> getAllFacturas(){
-        List<Registro_facturas> facturas = servFacturas.getAllFacturas();
+        List<RegistroFacturasDTO> facturas = RegistroFacturasDTO.MapperAllList(servFacturas.getAllFacturas());
 
         if(facturas.isEmpty()){
             return new ResponseEntity<>(404 + " No se encontraron resultados", HttpStatus.NOT_FOUND);
@@ -31,17 +33,37 @@ public class RegistroFacturasController {
 
     @GetMapping("/getFactura/{id}")
     public ResponseEntity<?> getFactura(@PathVariable("id") Integer id){
-        Optional<Registro_facturas> optFactura = servFacturas.getFactura(id);
-        if(optFactura.isPresent()){
-            return ResponseEntity.ok(optFactura.get());
+        RegistroFacturasDTO factura = servFacturas.getFactura(id);
+        if(factura != null){
+            return ResponseEntity.ok(factura);
         }
+        return new ResponseEntity<>(404 + " No se encontro el resultado", HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/getFacturaByIdGasto/{id}")
+    public  ResponseEntity<?> getFacturaByIdGasto(@PathVariable("id") Integer id){
+        List<RegistroFacturasDTO> facturas = RegistroFacturasDTO.MapperAllList(servFacturas.getAllByIdGasto(id));
+        if(facturas.isEmpty()){
+            return new ResponseEntity<>(404 + " No se encontraron resultados", HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(facturas);
+    }
+
+    @GetMapping("/getFacturaLike/{data}/{idGasto}")
+    public ResponseEntity<?> getFacturaLike(@PathVariable("data") String data, @PathVariable("idGasto") Integer id){
+        List<RegistroFacturasDTO> facturas = RegistroFacturasDTO.MapperAllList(servFacturas.getAllFacturasLike(data, id));
+
+        if(!facturas.isEmpty()){
+            return ResponseEntity.ok(facturas);
+        }
+
         return new ResponseEntity<>(404 + " No se encontro el resultado", HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("/createFactura")
     public ResponseEntity<?> createFactura(@RequestBody RegistroFacturasDTO facturaDTO){
-        if(servFacturas.createFactura(facturaDTO).isPresent()){
-            return new ResponseEntity<>(201, HttpStatus.CREATED);
+        if(servFacturas.createFactura(facturaDTO)){
+            return ResponseEntity.ok("Factura y productos guardados");
         }
         return new ResponseEntity<>(400, HttpStatus.BAD_REQUEST);
     }

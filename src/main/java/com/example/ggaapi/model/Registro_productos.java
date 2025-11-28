@@ -27,6 +27,6 @@ public class Registro_productos {
 
     @OneToOne
     @JoinColumn(name="idFacturas")
-    private Registro_facturas Facturas;
+    private Registro_facturas facturas;
 
 }

@@ -9,8 +9,10 @@ import java.util.Optional;
 public interface IRegistroFacturasService {
 
     List<Registro_facturas> getAllFacturas();
-    Optional<Registro_facturas> getFactura(Integer id);
-    Optional<Registro_facturas> createFactura(RegistroFacturasDTO facturaDTO);
+    List<Registro_facturas> getAllByIdGasto(Integer id);
+    List<Registro_facturas> getAllFacturasLike(String data, Integer id);
+    RegistroFacturasDTO getFactura(Integer id);
+    boolean createFactura(RegistroFacturasDTO facturaDTO);
     Optional<Registro_facturas> updateFactura(RegistroFacturasDTO facturaDTO);
 
 }

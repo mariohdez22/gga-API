@@ -9,11 +9,12 @@ import java.util.Optional;
 public interface IColaboradoresService {
 
     List<Colaboradores> getAllColaboradores();
+    List<Colaboradores> getAllColaboradoresLike(String data);
     List<Colaboradores> getColaboradoresVigentes();
     List<Colaboradores> getColaboradoresSuspendidos();
     List<Colaboradores> getColaboradoresNoDisponibles();
-    Optional<Colaboradores> getColaborador(Integer id);
+    ColaboradoresDTO getColaborador(Integer id);
     Optional<Colaboradores> createColaborador(ColaboradoresDTO colaboradorDTO);
     Optional<Colaboradores> updateColaborador(ColaboradoresDTO colaboradorDTO);
-
+    Optional<ColaboradoresDTO> getUser(String username);
 }

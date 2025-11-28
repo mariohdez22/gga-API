@@ -21,7 +21,7 @@ public class RegistroProductosController {
 
     @GetMapping("/getAllProductos")
     public ResponseEntity<?> getAllProductos(){
-        List<Registro_productos> productos = servProductos.getAllProducts();
+        List<RegistroProductosDTO> productos = RegistroProductosDTO.MapperAllList(servProductos.getAllProducts());
         if(productos.isEmpty()){
             return new ResponseEntity<>(404 + " No se encontraron resultados", HttpStatus.NOT_FOUND);
         }
@@ -30,14 +30,23 @@ public class RegistroProductosController {
 
     @GetMapping("/getProducto/{id}")
     public ResponseEntity<?> getProducto(@PathVariable("id") Integer id){
-        Optional<Registro_productos> optProducto = servProductos.getProduct(id);
-        if(optProducto.isPresent()){
-            return ResponseEntity.ok(optProducto.get());
+        RegistroProductosDTO producto = servProductos.getProduct(id);
+        if(producto != null){
+            return ResponseEntity.ok(producto);
         }
         return new ResponseEntity<>(404 + " No se encontro el resultado", HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("/createProducto")
+    @GetMapping("/getProductoByFactura/{id}")
+    public  ResponseEntity<?> getProductoByIdFactura(@PathVariable("id") Integer id){
+        List<RegistroProductosDTO> productos = RegistroProductosDTO.MapperAllList(servProductos.getAllByIdFactura(id));
+        if(productos.isEmpty()){
+            return new ResponseEntity<>(404 + " No se encontraron resultados", HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(productos);
+    }
+
+    /*@PostMapping("/createProducto")
     public ResponseEntity<?> createProducto(@RequestBody RegistroProductosDTO productoDTO){
         if(servProductos.createProduct(productoDTO).isPresent()){
             return new ResponseEntity<>(201, HttpStatus.CREATED);
@@ -51,5 +60,5 @@ public class RegistroProductosController {
             return new ResponseEntity<>(200, HttpStatus.OK);
         }
         return new ResponseEntity<>(400, HttpStatus.BAD_REQUEST);
-    }
+    }*/
 }

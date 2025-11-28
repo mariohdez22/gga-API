@@ -3,6 +3,7 @@ package com.example.ggaapi.controller;
 import com.example.ggaapi.dto.RegistroGastosDTO;
 import com.example.ggaapi.model.Registro_gastos;
 import com.example.ggaapi.service.IRegistroGastoService;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,18 @@ public class RegistroGastoController {
 
     @GetMapping("/getAllGastos")
     public ResponseEntity<?> getAllGastos(){
-        List<Registro_gastos> gastos = servGastos.getAllGastos();
+        List<RegistroGastosDTO> gastos = RegistroGastosDTO.MapperAllList(servGastos.getAllGastos());
+
+        if(gastos.isEmpty()){
+            return new ResponseEntity<>(404 + " No se encontraron resultados", HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(gastos);
+    }
+
+    @GetMapping("/getAllGastosDepa/{id}")
+    public ResponseEntity<?> getAllGastosDepa(@PathVariable("id") Integer id){
+        List<RegistroGastosDTO> gastos = RegistroGastosDTO.MapperAllList(servGastos.getAllGastosDepa(id));
+
         if(gastos.isEmpty()){
             return new ResponseEntity<>(404 + " No se encontraron resultados", HttpStatus.NOT_FOUND);
         }
@@ -29,11 +41,45 @@ public class RegistroGastoController {
 
     @GetMapping("/getGasto/{id}")
     public ResponseEntity<?> getGasto(@PathVariable("id") Integer id){
-        Optional<Registro_gastos> optGasto = servGastos.getGasto(id);
-        if(optGasto.isPresent()){
-            return ResponseEntity.ok(optGasto.get());
+        RegistroGastosDTO gasto = servGastos.getGasto(id);
+        if(gasto != null){
+            return ResponseEntity.ok(gasto);
         }
         return new ResponseEntity<>(404 + " No se encontro el resultado", HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/getAllGastoLike/{data}/{idDepa}")
+    public ResponseEntity<?> getAllGastoLike(@PathVariable("data") String data, @PathVariable("idDepa") Integer id){
+
+        List<RegistroGastosDTO> gastos = RegistroGastosDTO.MapperAllList(servGastos.getAllGastosLike(data, id));
+
+        if(!gastos.isEmpty()){
+            return ResponseEntity.ok(gastos);
+        }
+
+        return new ResponseEntity<>(404 + " No se encontro el resultado", HttpStatus.NOT_FOUND);
+
+    }
+
+    @GetMapping("/getAllGastoTransac/{idTransac}")
+    public ResponseEntity<?> getAllGastoTransac(@PathVariable("idTransac") Integer id){
+
+        List<RegistroGastosDTO> gt = RegistroGastosDTO.MapperAllList(servGastos.getAllGastosTransac(id));
+
+        if(!gt.isEmpty()){
+            return ResponseEntity.ok(gt);
+        }
+
+        return new ResponseEntity<>(404 + " No se encontro el resultado", HttpStatus.NOT_FOUND);
+
+    }
+
+
+    @GetMapping("/getCodigo")
+    public ResponseEntity<?> getCodigo()
+    {
+        String valor = servGastos.GeneracionCodigo();
+        return ResponseEntity.ok(valor);
     }
 
     @PostMapping("/createGasto")

@@ -14,23 +14,24 @@ public class Registro_gastos {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idGasto;
-
     private String codigoCompra;
-
     private String descripcion;
-
     private BigDecimal totalGastos;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name="idTipoGasto")
     private Tipo_gastos tipoGastos;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name="idDepartamento")
-    private Gestion_departamento Departamento;
+    private Gestion_departamento departamento;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name="idColaborador")
-    private Colaboradores Colaborador;
+    private Colaboradores colaborador;
+
+    @ManyToOne
+    @JoinColumn(name="idTipoTransaccion")
+    private Tipo_transaccion tipoTransaccion;
 
 }

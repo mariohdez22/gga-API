@@ -11,7 +11,6 @@ public class Colaboradores {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Integer idColaborador;
 
     private String nombres;
@@ -26,10 +25,10 @@ public class Colaboradores {
 
     @ManyToOne
     @JoinColumn(name = "idCargo")
-    private Cargo_colaborador Cargo;
+    private Cargo_colaborador cargo;
 
     @ManyToOne
     @JoinColumn(name="idEstado")
-    private Estado_colaborador Estado;
+    private Estado_colaborador estado;
 
 }
